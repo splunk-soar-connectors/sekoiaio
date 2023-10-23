@@ -1,0 +1,295 @@
+{
+    "appid": "78e7ba61-eb65-421f-9bdf-28a6d14a3deb",
+    "name": "Sekoiaio",
+    "description": "This app will interact with SEKOIA.IO",
+    "type": "information",
+    "product_vendor": "SEKOIA.IO",
+    "logo": "sekoiaio.png",
+    "logo_dark": "sekoiaio_dark.png",
+    "product_name": "SEKOIA.IO",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "SEKOIA.IO",
+    "license": "Copyright (c) SEKOIA.IO, 2023",
+    "app_version": "1.0.0",
+    "utctime_updated": "2023-10-09T08:07:31.780040Z",
+    "package_name": "phantom_sekoiaio",
+    "main_module": "sekoiaio_connector.py",
+    "min_phantom_version": "6.1.1.211",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "base_url": {
+            "description": "This's the base url to request SEKOIA API",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "https://api.sekoia.io",
+            "order": 0,
+            "name": "base_url",
+            "id": 0
+        },
+        "api_key": {
+            "description": "This's a key to get access to SEKOIA API",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 1,
+            "name": "api_key",
+            "id": 1
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "Get indicator",
+            "identifier": "get_indicator",
+            "description": "All the user to get an indicator according to some criteria",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "value": {
+                    "description": "Value of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "value"
+                },
+                "type": {
+                    "description": "Type of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "type"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "value",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.type",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "Get indicator Context",
+            "identifier": "get_indicator_context",
+            "description": "Allow the user to get the context of an indicator",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "value": {
+                    "description": "Value of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "value"
+                },
+                "type": {
+                    "description": "Type of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "type"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "value",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.type",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "Get Observable",
+            "identifier": "get_observable",
+            "description": "Allow the user to get an observable according to some criteria",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "value": {
+                    "description": "Value of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "value"
+                },
+                "type": {
+                    "description": "Type of the indicator",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "type"
+                },
+                "limit": {
+                    "description": "Set the limit of items",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2,
+                    "name": "limit"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.value",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "value",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.type",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "contains": [],
+                    "column_name": "limit",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ],
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.12.2-py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/py3/requests-2.31.0-py3-none-any.whl"
+            }
+        ]
+    }
+}
