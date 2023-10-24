@@ -402,8 +402,7 @@ def main():
         except Exception as e:
             print(
                 "Unable to get session id \
-                from the platform. Error: "
-                + str(e)
+                from the platform. Error: " + str(e)
             )
             exit(1)
 
