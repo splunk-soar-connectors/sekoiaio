@@ -61,8 +61,7 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, EMPTY_RESPONSE_ERROR_LOG), None
+            action_result.set_status(phantom.APP_ERROR, EMPTY_RESPONSE_ERROR_LOG), None
         )
 
     def _process_html_response(self, response, action_result):
@@ -85,10 +84,7 @@ class SekoiaioConnector(BaseConnector):
         )
 
         message = message.replace("{", "{{").replace("}", "}}")
-        return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, message), None
-        )
+        return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_json_response(self, response, action_result):
         """
@@ -125,14 +121,10 @@ class SekoiaioConnector(BaseConnector):
 
         message = "Error from server. Status Code: {0} \
                 Data from server: {1}".format(
-            response.status_code, response.text.replace(
-                "{", "{{").replace("}", "}}")
+            response.status_code, response.text.replace("{", "{{").replace("}", "}}")
         )
 
-        return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, message), None
-        )
+        return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_response(self, response, action_result):
         """
@@ -140,11 +132,9 @@ class SekoiaioConnector(BaseConnector):
         In our case there are just JSON reponses
         """
         if hasattr(action_result, "add_debug_data"):
-            action_result.add_debug_data(
-                {"response_status_code": response.status_code})
+            action_result.add_debug_data({"response_status_code": response.status_code})
             action_result.add_debug_data({"response_text": response.text})
-            action_result.add_debug_data(
-                {"response_headers": response.headers})
+            action_result.add_debug_data({"response_headers": response.headers})
 
         if "json" in response.headers.get("Content-Type", ""):
             return self._process_json_response(response, action_result)
@@ -157,14 +147,10 @@ class SekoiaioConnector(BaseConnector):
 
         message = "Can't process response from server. \
             Status Code: {0} Data from server: {1}".format(
-            response.status_code, response.text.replace(
-                "{", "{{").replace("}", "}}")
+            response.status_code, response.text.replace("{", "{{").replace("}", "}}")
         )
 
-        return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, message), None
-        )
+        return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
         """
@@ -189,22 +175,19 @@ class SekoiaioConnector(BaseConnector):
         except requests.exceptions.InvalidURL:
             error_message = f"Error connecting to server. Invalid URL: {url}"
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, error_message), resp_json
+                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
             )
         except requests.exceptions.InvalidSchema:
             error_message = f"Error connecting to server. \
                 No connection adapters were found for {url}"
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, error_message), resp_json
+                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
             )
         except requests.exceptions.ConnectionError:
             error_message = f"Error connecting to server. \
                 Connection Refused from the Server for {url}"
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, error_message), resp_json
+                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
             )
         except Exception as e:
             return RetVal(
@@ -229,8 +212,7 @@ class SekoiaioConnector(BaseConnector):
         )
 
         if phantom.is_fail(ret_val):
-            self.save_progress(
-                f"Test Connectivity Failed. {DOCUMENTATION_LOG}")
+            self.save_progress(f"Test Connectivity Failed. {DOCUMENTATION_LOG}")
             return action_result.get_status()
 
         self.save_progress(
@@ -258,13 +240,13 @@ class SekoiaioConnector(BaseConnector):
             "Authorization": "Bearer {0}".format(self.api_key)
         }
         ret_val, response = self._make_rest_call(
-            "/v2/inthreat/indicators", action_result,
-            params=params, headers=headers
+            "/v2/inthreat/indicators", action_result, params=params, headers=headers
         )
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        self.save_progress("Great, we get response from the endpoint !!")
         # Add the response into the data section
         action_result.add_data(response.get("items", []))
 
@@ -304,6 +286,8 @@ class SekoiaioConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        self.save_progress("Great, we get response from the endpoint !!")
+
         action_result.add_data(response)
 
         # Add a dictionary that is made up of
@@ -333,12 +317,13 @@ class SekoiaioConnector(BaseConnector):
         }
         # make rest call
         ret_val, response = self._make_rest_call(
-            "/v2/inthreat/observables", action_result,
-            params=params, headers=headers
+            "/v2/inthreat/observables", action_result, params=params, headers=headers
         )
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
+
+        self.save_progress("Great, we get response from the endpoint !!")
 
         # Add the response into the data section
         action_result.add_data(response.get("items", []))
@@ -412,12 +397,14 @@ def main():
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False,
-                               data=data, headers=headers)
+            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
             session_id = r2.cookies["sessionid"]
         except Exception as e:
-            print("Unable to get session id \
-                from the platform. Error: " + str(e))
+            print(
+                "Unable to get session id \
+                from the platform. Error: "
+                + str(e)
+            )
             exit(1)
 
     with open(args.input_test_json) as f:
