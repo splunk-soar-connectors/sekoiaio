@@ -38,3 +38,13 @@ Create an action that allow the user to get the context of an indicator
 ### Get Observable
 
 Create an action that allow the user to get an observable according to some criteria
+
+## Port Information
+
+The app uses HTTP/ HTTPS protocol for communicating with the Sekoiaio api. Below are the default
+ports used by Splunk SOAR.
+
+|         Service Name | Transport Protocol | Port |
+|----------------------|--------------------|------|
+|         http         | tcp                | 80   |
+|         https        | tcp                | 443  |
