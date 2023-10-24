@@ -49,7 +49,7 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "get_indicator",
+            "action": "get indicator",
             "identifier": "get_indicator",
             "description": "All the user to get an indicator according to some criteria",
             "type": "investigate",
@@ -118,7 +118,7 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "get_indicator_context",
+            "action": "get indicator context",
             "identifier": "get_indicator_context",
             "description": "Allow the user to get the context of an indicator",
             "type": "investigate",
@@ -187,7 +187,7 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "get_observable",
+            "action": "get observable",
             "identifier": "get_observable",
             "description": "Allow the user to get an observable according to some criteria",
             "type": "investigate",
