@@ -178,7 +178,7 @@ class SekoiaioConnector(BaseConnector):
         url = self._base_url + endpoint
         try:
             response = request_func(
-                url, verify=config.get("verify_server_cert", False), **kwargs
+                url, verify=config.get("verify_server_cert", True), **kwargs
             )
         except requests.exceptions.InvalidURL:
             error_message = f"Error connecting to server. Invalid URL: {url}"
@@ -318,7 +318,7 @@ class SekoiaioConnector(BaseConnector):
         value, _type, limit = (
             param.get("value", ""),
             param.get("type", ""),
-            param.get("limit", ""),
+            param.get("limit", 20),
         )
         params, headers = {"value": value, "type": _type, "limit": limit}, {
             "Authorization": "Bearer {0}".format(self.api_key)

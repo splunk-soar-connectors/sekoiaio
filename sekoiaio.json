@@ -34,6 +34,13 @@
             "order": 1,
             "name": "api_key",
             "id": 1
+        },
+        "verify_server_cert": {
+            "description": "Set true or false, to verify server ssl",
+            "data_type": "boolean",
+            "order": 2,
+            "name": "verify_server_cert",
+            "id": 2
         }
     },
     "actions": [
