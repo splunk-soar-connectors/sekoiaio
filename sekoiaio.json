@@ -1,11 +1,11 @@
 {
     "appid": "78e7ba61-eb65-421f-9bdf-28a6d14a3deb",
-    "name": "sekoia",
+    "name": "Sekoia",
     "description": "This app will interact with SEKOIA.IO",
     "type": "information",
     "product_vendor": "SEKOIA.IO",
-    "logo": "sekoiaio.svg",
-    "logo_dark": "sekoiaio_dark.svg",
+    "logo": "logo_sekoiaio.svg",
+    "logo_dark": "logo_sekoiaio_dark.svg",
     "product_name": "sekoia.io",
     "python_version": "3",
     "product_version_regex": ".*",
@@ -22,7 +22,6 @@
             "description": "This's the base url to request SEKOIA API",
             "data_type": "string",
             "required": true,
-            "value_list": [],
             "default": "https://api.sekoia.io",
             "order": 0,
             "name": "base_url",
@@ -58,22 +57,12 @@
                 "value": {
                     "description": "Value of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 0,
                     "name": "value"
                 },
                 "type": {
                     "description": "Type of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1,
                     "name": "type"
                 }
@@ -82,14 +71,12 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "value",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.type",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "type",
                     "column_order": 1
                 },
@@ -127,22 +114,12 @@
                 "value": {
                     "description": "Value of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 0,
                     "name": "value"
                 },
                 "type": {
                     "description": "Type of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1,
                     "name": "type"
                 }
@@ -151,14 +128,12 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "value",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.type",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "type",
                     "column_order": 1
                 },
@@ -196,33 +171,18 @@
                 "value": {
                     "description": "Value of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 0,
                     "name": "value"
                 },
                 "type": {
                     "description": "Type of the indicator",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1,
                     "name": "type"
                 },
                 "limit": {
                     "description": "Set the limit of items",
                     "data_type": "numeric",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 2,
                     "name": "limit"
                 }
@@ -231,21 +191,18 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "value",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.type",
                     "data_type": "string",
-                    "contains": [],
                     "column_name": "type",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.limit",
                     "data_type": "numeric",
-                    "contains": [],
                     "column_name": "limit",
                     "column_order": 2
                 },
@@ -281,8 +238,8 @@
                 "input_file": "wheels/py3/beautifulsoup4-4.12.2-py3-none-any.whl"
             },
             {
-                "module": "requests",
-                "input_file": "wheels/py3/requests-2.31.0-py3-none-any.whl"
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
             }
         ]
     },
@@ -293,28 +250,8 @@
                 "input_file": "wheels/py3/beautifulsoup4-4.12.2-py3-none-any.whl"
             },
             {
-                "module": "certifi",
-                "input_file": "wheels/py3/certifi-2023.7.22-py3-none-any.whl"
-            },
-            {
-                "module": "charset_normalizer",
-                "input_file": "wheels/py39/charset_normalizer-3.3.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/py3/idna-3.4-py3-none-any.whl"
-            },
-            {
-                "module": "requests",
-                "input_file": "wheels/py3/requests-2.31.0-py3-none-any.whl"
-            },
-            {
                 "module": "soupsieve",
                 "input_file": "wheels/py3/soupsieve-2.5-py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/py3/urllib3-2.0.7-py3-none-any.whl"
             }
         ]
     }

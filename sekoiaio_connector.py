@@ -1,8 +1,17 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# Python 3 Compatibility imports
-from __future__ import print_function, unicode_literals
+# File: sekoiaio_connector.py
+#
+# Copyright (c) SEKOIA.IO, 2023
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
 
 import json
 
@@ -15,8 +24,7 @@ from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
 # Usage of the consts file is recommended
-from sekoiaio_consts import (DOCUMENTATION_LOG, EMPTY_RESPONSE_ERROR_LOG, JSON_RESPONSE_400_ERROR_LOG, JSON_RESPONSE_401_ERROR_LOG,
-                             JSON_RESPONSE_403_ERROR_LOG)
+import sekoiaio_consts as consts
 
 
 class RetVal(tuple):
@@ -61,7 +69,7 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(phantom.APP_ERROR, EMPTY_RESPONSE_ERROR_LOG), None
+            action_result.set_status(phantom.APP_ERROR, consts.EMPTY_RESPONSE_ERROR_LOG), None
         )
 
     def _process_html_response(self, response, action_result):
@@ -106,17 +114,17 @@ class SekoiaioConnector(BaseConnector):
 
         if response.status_code == 400:
             return action_result.set_status(
-                phantom.APP_ERROR, JSON_RESPONSE_400_ERROR_LOG
+                phantom.APP_ERROR, consts.JSON_RESPONSE_400_ERROR_LOG
             )
 
         if response.status_code == 401:
             return action_result.set_status(
-                phantom.APP_ERROR, JSON_RESPONSE_401_ERROR_LOG
+                phantom.APP_ERROR, consts.JSON_RESPONSE_401_ERROR_LOG
             )
 
         if response.status_code == 403:
             return action_result.set_status(
-                phantom.APP_ERROR, JSON_RESPONSE_403_ERROR_LOG
+                phantom.APP_ERROR, consts.JSON_RESPONSE_403_ERROR_LOG
             )
 
         message = "Error from server. Status Code: {0} \
@@ -212,7 +220,7 @@ class SekoiaioConnector(BaseConnector):
         )
 
         if phantom.is_fail(ret_val):
-            self.save_progress(f"Test Connectivity Failed. {DOCUMENTATION_LOG}")
+            self.save_progress(f"Test Connectivity Failed. {consts.DOCUMENTATION_LOG}")
             return action_result.get_status()
 
         self.save_progress(
@@ -360,18 +368,21 @@ class SekoiaioConnector(BaseConnector):
 
 def main():
     import argparse
+    import sys
 
     argparser = argparse.ArgumentParser()
 
     argparser.add_argument("input_test_json", help="Input Test JSON file")
     argparser.add_argument("-u", "--username", help="username", required=False)
     argparser.add_argument("-p", "--password", help="password", required=False)
+    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
 
     args = argparser.parse_args()
     session_id = None
 
     username = args.username
     password = args.password
+    verify = args.verify
 
     if username is not None and password is None:
         # User specified a username but not a password, so ask
@@ -397,14 +408,14 @@ def main():
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, verify=verify, data=data, headers=headers)
             session_id = r2.cookies["sessionid"]
         except Exception as e:
             print(
                 "Unable to get session id \
                 from the platform. Error: " + str(e)
             )
-            exit(1)
+            sys.exit(1)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -421,7 +432,7 @@ def main():
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)
 
 
 if __name__ == "__main__":
