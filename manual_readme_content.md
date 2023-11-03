@@ -1,5 +1,5 @@
 [comment]: # "File: README.md"
-[comment]: # "Copyright (c) 2023 Splunk Inc."
+[comment]: # "Copyright (c) SEKOIA.IO, 2023"
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
