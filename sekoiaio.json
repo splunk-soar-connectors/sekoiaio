@@ -36,8 +36,9 @@
             "id": 1
         },
         "verify_server_cert": {
-            "description": "Set true or false, to verify server ssl",
+            "description": "Set true or false, to verify server ssl (Default: True)",
             "data_type": "boolean",
+            "default": true,
             "order": 2,
             "name": "verify_server_cert",
             "id": 2
@@ -188,8 +189,9 @@
                     "name": "type"
                 },
                 "limit": {
-                    "description": "Set the limit of items",
+                    "description": "Set the limit of items (Default:20)",
                     "data_type": "numeric",
+                    "default": 20,
                     "order": 2,
                     "name": "limit"
                 }
