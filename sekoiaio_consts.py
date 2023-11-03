@@ -1,6 +1,6 @@
 # File: sekoiaio_consts.py
 #
-# Copyright (c) SEKOIA.IO, 2023
+# Copyright (c) 2023 SEKOIA.IO
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

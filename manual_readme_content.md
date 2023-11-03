@@ -1,5 +1,5 @@
 [comment]: # "File: README.md"
-[comment]: # "Copyright (c) SEKOIA.IO, 2023"
+[comment]: # "Copyright (c) 2023 SEKOIA.IO"
 [comment]: # ""
 [comment]: # "Licensed under the Apache License, Version 2.0 (the 'License');"
 [comment]: # "you may not use this file except in compliance with the License."
