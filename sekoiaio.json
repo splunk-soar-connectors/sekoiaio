@@ -14,6 +14,7 @@
     "app_version": "1.0.0",
     "utctime_updated": "2023-10-09T08:07:31.780040Z",
     "package_name": "phantom_sekoiaio",
+    "fips_compliant": false,
     "main_module": "sekoiaio_connector.py",
     "min_phantom_version": "6.1.1.211",
     "app_wizard_version": "1.0.0",
@@ -79,19 +80,19 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "column_name": "value",
+                    "column_name": "Value",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.type",
                     "data_type": "string",
-                    "column_name": "type",
+                    "column_name": "Type",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 2
                 },
                 {
@@ -144,19 +145,19 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "column_name": "value",
+                    "column_name": "Value",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.type",
                     "data_type": "string",
-                    "column_name": "type",
+                    "column_name": "Type",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 2
                 },
                 {
@@ -216,7 +217,7 @@
                 {
                     "data_path": "action_result.parameter.value",
                     "data_type": "string",
-                    "column_name": "value",
+                    "column_name": "Value",
                     "column_order": 0
                 },
                 {
@@ -228,13 +229,13 @@
                 {
                     "data_path": "action_result.parameter.limit",
                     "data_type": "numeric",
-                    "column_name": "limit",
+                    "column_name": "Limit",
                     "column_order": 2
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
-                    "column_name": "status",
+                    "column_name": "Status",
                     "column_order": 3
                 },
                 {
