@@ -34,77 +34,61 @@ class RetVal(tuple):
 
 class SekoiaioConnector(BaseConnector):
     def __init__(self):
-        super(SekoiaioConnector, self).__init__()
-        self._state = None
-        self._base_url = None
+        super().__init__()
+        self.state = None
+        self.base_url = None
         self.api_key = None
 
     def initialize(self):
-        """
-        This's an optinal method but we will use it to load
-        both state and configuration
-        """
-        self._state = self.load_state()
+        self.state = self.load_state()
         config = self.get_config()
-        self._base_url = config["base_url"]
+        self.base_url = config["base_url"]
         self.api_key = config["api_key"]
-
-        if not (self._base_url or self.api_key):
-            return phantom.APP_ERROR
 
         return phantom.APP_SUCCESS
 
     def finalize(self):
-        """
-        Save the state, this data is saved across actions and app upgrades
-        """
-        self.save_state(self._state)
+        self.save_state(self.state)
         return phantom.APP_SUCCESS
 
+    def _process_brackets(self, text_response):
+        return text_response.replace("{", "{{").replace("}", "}}")
+
     def _process_empty_response(self, response, action_result):
-        """
-        How we can process an empty response for both 200 and for >400
-        """
         if response.status_code == 200:
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(phantom.APP_ERROR, consts.EMPTY_RESPONSE_ERROR_LOG), None
+            action_result.set_status(
+                phantom.APP_ERROR, consts.EMPTY_RESPONSE_ERROR_LOG
+            ),
+            None,
         )
 
     def _process_html_response(self, response, action_result):
-        """
-        How we can process an HTML response
-        """
         status_code = response.status_code
 
         try:
             soup = BeautifulSoup(response.text, "html.parser")
             error_text = soup.text
             split_lines = error_text.split("\n")
-            split_lines = [x.strip() for x in split_lines if x.strip()]
-            error_text = "\n".join(split_lines)
+            error_text = "\n".join(x.strip() for x in split_lines if x.strip())
         except Exception as e:
             error_text = f"Cannot parse error details : {e}"
 
-        message = "Status Code: {0}. Data from server:\n{1}\n".format(
-            status_code, error_text
-        )
+        message = f"Status Code: {status_code}. Data from server:\n{error_text}\n"
 
         message = message.replace("{", "{{").replace("}", "}}")
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_json_response(self, response, action_result):
-        """
-        How we can process an JSON response
-        """
         try:
             resp_json = response.json()
         except Exception as e:
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    "Unable to parse JSON response. Error: {0}".format(str(e)),
+                    f"Unable to parse JSON response. Error: {str(e)}",
                 ),
                 None,
             )
@@ -127,18 +111,12 @@ class SekoiaioConnector(BaseConnector):
                 phantom.APP_ERROR, consts.JSON_RESPONSE_403_ERROR_LOG
             )
 
-        message = "Error from server. Status Code: {0} \
-                Data from server: {1}".format(
-            response.status_code, response.text.replace("{", "{{").replace("}", "}}")
-        )
+        message = f"Error from server. Status Code: {response.status_code} \
+                Data from server: {self._process_brackets(response.text)}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_response(self, response, action_result):
-        """
-        The main method to process a Response.
-        In our case there are just JSON reponses
-        """
         if hasattr(action_result, "add_debug_data"):
             action_result.add_debug_data({"response_status_code": response.status_code})
             action_result.add_debug_data({"response_text": response.text})
@@ -153,17 +131,13 @@ class SekoiaioConnector(BaseConnector):
         if not response.text:
             return self._process_empty_response(response, action_result)
 
-        message = "Can't process response from server. \
-            Status Code: {0} Data from server: {1}".format(
-            response.status_code, response.text.replace("{", "{{").replace("}", "}}")
-        )
+        message = f"Can't process response from server. \
+            Status Code: {response.status_code} Data from server: \
+            {self._process_brackets(response.text)}"
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _make_rest_call(self, endpoint, action_result, method="get", **kwargs):
-        """
-        This's for making rest calls depending on the method choosen.
-        """
         config = self.get_config()
         resp_json = None
         try:
@@ -171,11 +145,11 @@ class SekoiaioConnector(BaseConnector):
         except AttributeError:
             return RetVal(
                 action_result.set_status(
-                    phantom.APP_ERROR, "Invalid method: {0}".format(method)
+                    phantom.APP_ERROR, f"Invalid method: {method}"
                 ),
                 resp_json,
             )
-        url = self._base_url + endpoint
+        url = self.base_url + endpoint
         try:
             response = request_func(
                 url, verify=config.get("verify_server_cert", True), **kwargs
@@ -201,7 +175,7 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    "Error Connecting to server. Details: {0}".format(str(e)),
+                    f"Error Connecting to server. Details: {str(e)}",
                 ),
                 resp_json,
             )
@@ -209,12 +183,9 @@ class SekoiaioConnector(BaseConnector):
         return self._process_response(response, action_result)
 
     def _handle_test_connectivity(self, param):
-        """
-        Tests API connectivity and authentication
-        """
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Start Connecting to endpoint ..... !!")
-        headers = {"Authorization": "Bearer {0}".format(self.api_key)}
+        headers = {"Authorization": f"Bearer {self.api_key}"}
         ret_val, response = self._make_rest_call(
             "/v1/auth/validate", action_result, params=None, headers=headers
         )
@@ -229,23 +200,17 @@ class SekoiaioConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_indicator(self, param):
-        """
-        Create an action that allow the user to
-        get an indicator according to some criteria
-        """
         self.save_progress(
-            "In get indicator action handler for: {0}".format(
-                self.get_action_identifier()
-            )
+            f"In get indicator action handler for: {self.get_action_identifier()}"
         )
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # This 2 required parameters to requests this endpoint
         # Take a look at
         # /cti/develop/rest_api/intelligences/Indicators
-        value, _type = param.get("value", ""), param.get("type", "")
-        params, headers = {"value": value, "type": _type}, {
-            "Authorization": "Bearer {0}".format(self.api_key)
+        value, type_ = param.get("value", ""), param.get("type", "")
+        params, headers = {"value": value, "type": type_}, {
+            "Authorization": f"Bearer {self.api_key}"
         }
         ret_val, response = self._make_rest_call(
             "/v2/inthreat/indicators", action_result, params=params, headers=headers
@@ -266,23 +231,17 @@ class SekoiaioConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_indicator_context(self, param):
-        """
-        Create an action that allow the user to
-        get the context of an indicator.
-        """
         self.save_progress(
-            "In get indicator context action handler for: {0}".format(
-                self.get_action_identifier()
-            )
+            f"In get indicator context action handler for: {self.get_action_identifier()}"
         )
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # This 2 required parameters to requests this endpoint
         # Take a look at
         # cti/develop/rest_api/intelligence/Indicators/operation/get_indicator_context_resource
-        value, _type = param.get("value", ""), param.get("type", "")
-        params, headers = {"value": value, "type": _type}, {
-            "Authorization": "Bearer {0}".format(self.api_key)
+        value, type_ = param.get("value", ""), param.get("type", "")
+        params, headers = {"value": value, "type": type_}, {
+            "Authorization": f"Bearer {self.api_key}"
         }
         ret_val, response = self._make_rest_call(
             "/v2/inthreat/indicators/context",
@@ -306,22 +265,16 @@ class SekoiaioConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_observable(self, param):
-        """
-        Create an action that allow the user to
-        get an observable according to some criteria
-        """
-        self.save_progress(
-            "In action handler for: {0}".format(self.get_action_identifier())
-        )
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        value, _type, limit = (
+        value, type_, limit = (
             param.get("value", ""),
             param.get("type", ""),
             param.get("limit", 20),
         )
-        params, headers = {"value": value, "type": _type, "limit": limit}, {
-            "Authorization": "Bearer {0}".format(self.api_key)
+        params, headers = {"value": value, "type": type_, "limit": limit}, {
+            "Authorization": f"Bearer {self.api_key}"
         }
         # make rest call
         ret_val, response = self._make_rest_call(
@@ -375,7 +328,14 @@ def main():
     argparser.add_argument("input_test_json", help="Input Test JSON file")
     argparser.add_argument("-u", "--username", help="username", required=False)
     argparser.add_argument("-p", "--password", help="password", required=False)
-    argparser.add_argument('-v', '--verify', action='store_true', help='verify', required=False, default=False)
+    argparser.add_argument(
+        "-v",
+        "--verify",
+        action="store_true",
+        help="verify",
+        required=False,
+        default=False,
+    )
 
     args = argparser.parse_args()
     session_id = None
@@ -398,14 +358,13 @@ def main():
             r = requests.get(login_url, verify=False)
             csrftoken = r.cookies["csrftoken"]
 
-            data = dict()
-            data["username"] = username
-            data["password"] = password
-            data["csrfmiddlewaretoken"] = csrftoken
+            data = {
+                "username": username,
+                "password": password,
+                "csrfmiddlewaretoken": csrftoken,
+            }
 
-            headers = dict()
-            headers["Cookie"] = "csrftoken=" + csrftoken
-            headers["Referer"] = login_url
+            headers = {"Cookie": "csrftoken=" + csrftoken, "Referer": login_url}
 
             print("Logging into Platform to get the session id")
             r2 = requests.post(login_url, verify=verify, data=data, headers=headers)
@@ -413,7 +372,8 @@ def main():
         except Exception as e:
             print(
                 "Unable to get session id \
-                from the platform. Error: " + str(e)
+                from the platform. Error: "
+                + str(e)
             )
             sys.exit(1)
 
