@@ -371,9 +371,8 @@ def main():
             session_id = r2.cookies["sessionid"]
         except Exception as e:
             print(
-                "Unable to get session id \
-                from the platform. Error: "
-                + str(e)
+                f"Unable to get session id \
+                from the platform. Error: {str(e)}"
             )
             sys.exit(1)
 
