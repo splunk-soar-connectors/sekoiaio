@@ -78,7 +78,7 @@ class SekoiaioConnector(BaseConnector):
 
         message = f"Status Code: {status_code}. Data from server:\n{error_text}\n"
 
-        message = message.replace("{", "{{").replace("}", "}}")
+        message = self._process_brackets(message)
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_json_response(self, response, action_result):
