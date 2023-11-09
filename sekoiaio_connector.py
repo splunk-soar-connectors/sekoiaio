@@ -219,7 +219,7 @@ class SekoiaioConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        self.save_progress("Great, we get response from the endpoint !!")
+        self.save_progress("Received response from endpoint")
         # Add the response into the data section
         action_result.add_data(response.get("items", []))
 
