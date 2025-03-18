@@ -10,7 +10,7 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "SEKOIA.IO",
-    "license": "Copyright (c) 2023 SEKOIA.IO",
+    "license": "Copyright (c) 2023-2025 SEKOIA.IO",
     "app_version": "1.0.1",
     "utctime_updated": "2023-10-09T08:07:31.780040Z",
     "package_name": "phantom_sekoiaio",

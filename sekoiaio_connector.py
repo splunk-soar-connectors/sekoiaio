@@ -1,6 +1,6 @@
 # File: sekoiaio_connector.py
 #
-# Copyright (c) 2023 SEKOIA.IO
+# Copyright (c) 2023-2025 SEKOIA.IO
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ import json
 
 # Phantom App imports
 import phantom.app as phantom
+
 # Useful libraries
 import requests
 from bs4 import BeautifulSoup
@@ -59,9 +60,7 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, consts.EMPTY_RESPONSE_ERROR_LOG
-            ),
+            action_result.set_status(phantom.APP_ERROR, consts.EMPTY_RESPONSE_ERROR_LOG),
             None,
         )
 
@@ -88,7 +87,7 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    f"Unable to parse JSON response. Error: {str(e)}",
+                    f"Unable to parse JSON response. Error: {e!s}",
                 ),
                 None,
             )
@@ -97,19 +96,13 @@ class SekoiaioConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         if response.status_code == 400:
-            return action_result.set_status(
-                phantom.APP_ERROR, consts.JSON_RESPONSE_400_ERROR_LOG
-            )
+            return action_result.set_status(phantom.APP_ERROR, consts.JSON_RESPONSE_400_ERROR_LOG)
 
         if response.status_code == 401:
-            return action_result.set_status(
-                phantom.APP_ERROR, consts.JSON_RESPONSE_401_ERROR_LOG
-            )
+            return action_result.set_status(phantom.APP_ERROR, consts.JSON_RESPONSE_401_ERROR_LOG)
 
         if response.status_code == 403:
-            return action_result.set_status(
-                phantom.APP_ERROR, consts.JSON_RESPONSE_403_ERROR_LOG
-            )
+            return action_result.set_status(phantom.APP_ERROR, consts.JSON_RESPONSE_403_ERROR_LOG)
 
         message = f"Error from server. Status Code: {response.status_code} \
                 Data from server: {self._process_brackets(response.text)}"
@@ -144,38 +137,28 @@ class SekoiaioConnector(BaseConnector):
             request_func = getattr(requests, method)
         except AttributeError:
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, f"Invalid method: {method}"
-                ),
+                action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"),
                 resp_json,
             )
         url = self.base_url + endpoint
         try:
-            response = request_func(
-                url, verify=config.get("verify_server_cert", True), **kwargs
-            )
+            response = request_func(url, verify=config.get("verify_server_cert", True), **kwargs)
         except requests.exceptions.InvalidURL:
             error_message = f"Error connecting to server. Invalid URL: {url}"
-            return RetVal(
-                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except requests.exceptions.InvalidSchema:
             error_message = f"Error connecting to server. \
                 No connection adapters were found for {url}"
-            return RetVal(
-                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except requests.exceptions.ConnectionError:
             error_message = f"Error connecting to server. \
                 Connection Refused from the Server for {url}"
-            return RetVal(
-                action_result.set_status(phantom.APP_ERROR, error_message), resp_json
-            )
+            return RetVal(action_result.set_status(phantom.APP_ERROR, error_message), resp_json)
         except Exception as e:
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    f"Error Connecting to server. Details: {str(e)}",
+                    f"Error Connecting to server. Details: {e!s}",
                 ),
                 resp_json,
             )
@@ -186,35 +169,25 @@ class SekoiaioConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Start Connecting to endpoint ..... !!")
         headers = {"Authorization": f"Bearer {self.api_key}"}
-        ret_val, response = self._make_rest_call(
-            "/v1/auth/validate", action_result, params=None, headers=headers
-        )
+        ret_val, response = self._make_rest_call("/v1/auth/validate", action_result, params=None, headers=headers)
 
         if phantom.is_fail(ret_val):
             self.save_progress(f"Test Connectivity Failed. {consts.DOCUMENTATION_LOG}")
             return action_result.get_status()
 
-        self.save_progress(
-            "Test connectivity passed, your token is valid. You can use it."
-        )
+        self.save_progress("Test connectivity passed, your token is valid. You can use it.")
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_indicator(self, param):
-        self.save_progress(
-            f"In get indicator action handler for: {self.get_action_identifier()}"
-        )
+        self.save_progress(f"In get indicator action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # This 2 required parameters to requests this endpoint
         # Take a look at
         # /cti/develop/rest_api/intelligences/Indicators
         value, type_ = param.get("value", ""), param.get("type", "")
-        params, headers = {"value": value, "type": type_}, {
-            "Authorization": f"Bearer {self.api_key}"
-        }
-        ret_val, response = self._make_rest_call(
-            "/v2/inthreat/indicators", action_result, params=params, headers=headers
-        )
+        params, headers = {"value": value, "type": type_}, {"Authorization": f"Bearer {self.api_key}"}
+        ret_val, response = self._make_rest_call("/v2/inthreat/indicators", action_result, params=params, headers=headers)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -231,18 +204,14 @@ class SekoiaioConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_indicator_context(self, param):
-        self.save_progress(
-            f"In get indicator context action handler for: {self.get_action_identifier()}"
-        )
+        self.save_progress(f"In get indicator context action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # This 2 required parameters to requests this endpoint
         # Take a look at
         # cti/develop/rest_api/intelligence/Indicators/operation/get_indicator_context_resource
         value, type_ = param.get("value", ""), param.get("type", "")
-        params, headers = {"value": value, "type": type_}, {
-            "Authorization": f"Bearer {self.api_key}"
-        }
+        params, headers = {"value": value, "type": type_}, {"Authorization": f"Bearer {self.api_key}"}
         ret_val, response = self._make_rest_call(
             "/v2/inthreat/indicators/context",
             action_result,
@@ -273,13 +242,9 @@ class SekoiaioConnector(BaseConnector):
             param.get("type", ""),
             param.get("limit", 20),
         )
-        params, headers = {"value": value, "type": type_, "limit": limit}, {
-            "Authorization": f"Bearer {self.api_key}"
-        }
+        params, headers = {"value": value, "type": type_, "limit": limit}, {"Authorization": f"Bearer {self.api_key}"}
         # make rest call
-        ret_val, response = self._make_rest_call(
-            "/v2/inthreat/observables", action_result, params=params, headers=headers
-        )
+        ret_val, response = self._make_rest_call("/v2/inthreat/observables", action_result, params=params, headers=headers)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -372,7 +337,7 @@ def main():
         except Exception as e:
             print(
                 f"Unable to get session id \
-                from the platform. Error: {str(e)}"
+                from the platform. Error: {e!s}"
             )
             sys.exit(1)
 
