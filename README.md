@@ -1,7 +1,7 @@
 # Sekoia
 
 Publisher: SEKOIA.IO \
-Connector Version: 1.0.1 \
+Connector Version: 1.0.2 \
 Product Vendor: SEKOIA.IO \
 Product Name: sekoia.io \
 Minimum Product Version: 6.1.1.211
