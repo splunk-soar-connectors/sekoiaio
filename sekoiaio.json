@@ -7,7 +7,7 @@
     "logo": "logo_sekoiaio.svg",
     "logo_dark": "logo_sekoiaio_dark.svg",
     "product_name": "sekoia.io",
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "product_version_regex": ".*",
     "publisher": "SEKOIA.IO",
     "license": "Copyright (c) 2023-2025 SEKOIA.IO",
